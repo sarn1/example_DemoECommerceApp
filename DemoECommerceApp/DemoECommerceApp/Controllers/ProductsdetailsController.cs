@@ -10,64 +10,57 @@ using DemoECommerceApp.Models;
 namespace DemoECommerceApp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Products")]
-    public class ProductsController : Controller
+    [Route("api/Productsdetails")]
+    public class ProductsdetailsController : Controller
     {
         private readonly FlixOneStoreContext _context;
 
-        public ProductsController(FlixOneStoreContext context)
+        public ProductsdetailsController(FlixOneStoreContext context)
         {
             _context = context;
         }
 
-        // GET: api/Products
+        // GET: api/Productsdetails
         [HttpGet]
-        public IEnumerable<Products> GetProducts(string searchText)
+        public IEnumerable<Productsdetail> GetProductsdetail()
         {
-            var products = _context.Products.Include(x => x.Productsdetail).ToList();
-
-            if (!string.IsNullOrEmpty(searchText))
-                products = products.Where(p => p.Productsdetail
-                                                .Any(pd => pd.Name.ToLower().Contains(searchText.ToLower())))
-                                   .ToList();
-
-            return products;
+            return _context.Productsdetail;
         }
 
-        // GET: api/Products/5
+        // GET: api/Productsdetails/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProducts([FromRoute] Guid id)
+        public async Task<IActionResult> GetProductsdetail([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var products = await _context.Products.SingleOrDefaultAsync(m => m.Id == id);
+            var productsdetail = await _context.Productsdetail.SingleOrDefaultAsync(m => m.Id == id);
 
-            if (products == null)
+            if (productsdetail == null)
             {
                 return NotFound();
             }
 
-            return Ok(products);
+            return Ok(productsdetail);
         }
 
-        // PUT: api/Products/5
+        // PUT: api/Productsdetails/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProducts([FromRoute] Guid id, [FromBody] Products products)
+        public async Task<IActionResult> PutProductsdetail([FromRoute] Guid id, [FromBody] Productsdetail productsdetail)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != products.Id)
+            if (id != productsdetail.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(products).State = EntityState.Modified;
+            _context.Entry(productsdetail).State = EntityState.Modified;
 
             try
             {
@@ -75,7 +68,7 @@ namespace DemoECommerceApp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductsExists(id))
+                if (!ProductsdetailExists(id))
                 {
                     return NotFound();
                 }
@@ -88,23 +81,23 @@ namespace DemoECommerceApp.Controllers
             return NoContent();
         }
 
-        // POST: api/Products
+        // POST: api/Productsdetails
         [HttpPost]
-        public async Task<IActionResult> PostProducts([FromBody] Products products)
+        public async Task<IActionResult> PostProductsdetail([FromBody] Productsdetail productsdetail)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Products.Add(products);
+            _context.Productsdetail.Add(productsdetail);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (ProductsExists(products.Id))
+                if (ProductsdetailExists(productsdetail.Id))
                 {
                     return new StatusCodeResult(StatusCodes.Status409Conflict);
                 }
@@ -114,33 +107,33 @@ namespace DemoECommerceApp.Controllers
                 }
             }
 
-            return CreatedAtAction("GetProducts", new { id = products.Id }, products);
+            return CreatedAtAction("GetProductsdetail", new { id = productsdetail.Id }, productsdetail);
         }
 
-        // DELETE: api/Products/5
+        // DELETE: api/Productsdetails/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProducts([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteProductsdetail([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var products = await _context.Products.SingleOrDefaultAsync(m => m.Id == id);
-            if (products == null)
+            var productsdetail = await _context.Productsdetail.SingleOrDefaultAsync(m => m.Id == id);
+            if (productsdetail == null)
             {
                 return NotFound();
             }
 
-            _context.Products.Remove(products);
+            _context.Productsdetail.Remove(productsdetail);
             await _context.SaveChangesAsync();
 
-            return Ok(products);
+            return Ok(productsdetail);
         }
 
-        private bool ProductsExists(Guid id)
+        private bool ProductsdetailExists(Guid id)
         {
-            return _context.Products.Any(e => e.Id == id);
+            return _context.Productsdetail.Any(e => e.Id == id);
         }
     }
 }

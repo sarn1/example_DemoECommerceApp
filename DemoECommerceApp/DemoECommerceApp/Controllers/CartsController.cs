@@ -6,68 +6,63 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DemoECommerceApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DemoECommerceApp.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Products")]
-    public class ProductsController : Controller
+    [Route("api/Carts")]
+    [Authorize]
+    public class CartsController : Controller
     {
         private readonly FlixOneStoreContext _context;
 
-        public ProductsController(FlixOneStoreContext context)
+        public CartsController(FlixOneStoreContext context)
         {
             _context = context;
         }
 
-        // GET: api/Products
+        // GET: api/Carts
         [HttpGet]
-        public IEnumerable<Products> GetProducts(string searchText)
+        public IEnumerable<Cart> GetCart()
         {
-            var products = _context.Products.Include(x => x.Productsdetail).ToList();
-
-            if (!string.IsNullOrEmpty(searchText))
-                products = products.Where(p => p.Productsdetail
-                                                .Any(pd => pd.Name.ToLower().Contains(searchText.ToLower())))
-                                   .ToList();
-
-            return products;
+            return _context.Cart;
         }
 
-        // GET: api/Products/5
+        // GET: api/Carts/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProducts([FromRoute] Guid id)
+        public async Task<IActionResult> GetCart([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var products = await _context.Products.SingleOrDefaultAsync(m => m.Id == id);
+            var cart = await _context.Cart.SingleOrDefaultAsync(m => m.Id == id);
 
-            if (products == null)
+            if (cart == null)
             {
                 return NotFound();
             }
 
-            return Ok(products);
+            return Ok(cart);
         }
 
-        // PUT: api/Products/5
+        // PUT: api/Carts/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProducts([FromRoute] Guid id, [FromBody] Products products)
+        public async Task<IActionResult> PutCart([FromRoute] Guid id, [FromBody] Cart cart)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != products.Id)
+            if (id != cart.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(products).State = EntityState.Modified;
+            _context.Entry(cart).State = EntityState.Modified;
 
             try
             {
@@ -75,7 +70,7 @@ namespace DemoECommerceApp.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProductsExists(id))
+                if (!CartExists(id))
                 {
                     return NotFound();
                 }
@@ -88,23 +83,23 @@ namespace DemoECommerceApp.Controllers
             return NoContent();
         }
 
-        // POST: api/Products
+        // POST: api/Carts
         [HttpPost]
-        public async Task<IActionResult> PostProducts([FromBody] Products products)
+        public async Task<IActionResult> PostCart([FromBody] Cart cart)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.Products.Add(products);
+            _context.Cart.Add(cart);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (ProductsExists(products.Id))
+                if (CartExists(cart.Id))
                 {
                     return new StatusCodeResult(StatusCodes.Status409Conflict);
                 }
@@ -114,33 +109,33 @@ namespace DemoECommerceApp.Controllers
                 }
             }
 
-            return CreatedAtAction("GetProducts", new { id = products.Id }, products);
+            return CreatedAtAction("GetCart", new { id = cart.Id }, cart);
         }
 
-        // DELETE: api/Products/5
+        // DELETE: api/Carts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProducts([FromRoute] Guid id)
+        public async Task<IActionResult> DeleteCart([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var products = await _context.Products.SingleOrDefaultAsync(m => m.Id == id);
-            if (products == null)
+            var cart = await _context.Cart.SingleOrDefaultAsync(m => m.Id == id);
+            if (cart == null)
             {
                 return NotFound();
             }
 
-            _context.Products.Remove(products);
+            _context.Cart.Remove(cart);
             await _context.SaveChangesAsync();
 
-            return Ok(products);
+            return Ok(cart);
         }
 
-        private bool ProductsExists(Guid id)
+        private bool CartExists(Guid id)
         {
-            return _context.Products.Any(e => e.Id == id);
+            return _context.Cart.Any(e => e.Id == id);
         }
     }
 }

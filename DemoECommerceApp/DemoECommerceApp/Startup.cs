@@ -1,7 +1,6 @@
 ﻿using DemoECommerceApp.Interfaces;
 using DemoECommerceApp.Models;
 using DemoECommerceApp.Security.OAuth;
-
 using DemoECommerceApp.Services;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
@@ -11,7 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using IdentityServer4.AspNetIdentity;
+using Newtonsoft.Json;
 
 namespace DemoECommerceApp
 {
@@ -68,7 +67,12 @@ namespace DemoECommerceApp
             services.AddTransient<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>();
             services.AddTransient<IProfileService, ProfileService>();
 
-            services.AddMvc();
+            // p 105 - preventing looping
+            services.AddMvc()
+            .AddJsonOptions(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
 
 
             //Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
