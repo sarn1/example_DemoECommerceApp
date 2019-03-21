@@ -63,3 +63,4 @@ If you were to make this synchronous. Ie remove all the asyncs and awaits and ju
 - In `Startup.cs` the `.UseMVC` tells the system to add MVC to the piplines which is an extension of `Microsoft.AspNetCore.Builder.IApplicationBuilder` which has 4 important `IApplicationBuilder` methods.
 - These middleware method can be shortcircuited (a request that is nothing but ending a request) or pass the request to the next delegate.
 - Nuget: Microsoft.ApplicationInsights.AspNetCore and Swashbuckle.ASPNETCore for Swagger support.
+- p.147 - In Package Manager Console, navigate to the projects folder (`cd chapter5`) and then run `dotnet run`
