@@ -70,7 +70,10 @@ namespace DemoECommerceApp
 
             services.AddMvc();
 
-            var connection = @"Server=.;Database=FlixOneStore;Trusted_Connection=True";
+
+            //Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False
+            //Server=.;Database=FlixOneStore;Trusted_Connection=True
+            var connection = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=FlixOneStore;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             services.AddDbContext<FlixOneStoreContext>(options => options.UseSqlServer(connection));
         }
 

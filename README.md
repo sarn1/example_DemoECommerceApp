@@ -2,7 +2,7 @@
 - https://github.com/PacktPublishing/Building-RESTful-Web-Services-with-DOTNET-Core
 
 
-- <scheme name> : <hierarchical part> [? query] [# fragment]
+- `<scheme name> : <hierarchical part> [? query] [# fragment]`
     - hierarchical part also contains the option query and fragment part
 - p.14 - caching can be set in the header
 - p.16 - verbs chart with safe vs. idempotent vs. nonidempotent
@@ -15,11 +15,17 @@
 - p31 - Create the `DemoECommerceApp` is `File > New > Project > ASP.NET Core Web Application > API`
 - p46 - Code for returning HTTP 500 error for faild `POST` is `return StatusCode(500);`
 
+---
 
 - For eCommerce App (p.60)
--installed Microsoft.EntityFrameworkCore.SqlServer and Microsoft.EntityFrameworkCore.Tools
-- created localdb using https://github.com/PacktPublishing/Building-RESTful-Web-Services-with-DOTNET-Core/blob/master/Chapter03/DB/FlixOneStore.sql
+- Installed Microsoft.EntityFrameworkCore.SqlServer and Microsoft.EntityFrameworkCore.Tools
+- Created localdb using https://github.com/PacktPublishing/Building-RESTful-Web-Services-with-DOTNET-Core/blob/master/Chapter03/DB/FlixOneStore.sql
 - then ran `Scaffold-DbContext "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=FlixOneStore;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Tables Customers` in the package manager console.
-- installed McApp.AppCore.IdentityServer4
-- (p.73) This is where I stopped following the book.  Code set incomplete.  
+- https://github.com/sarn1/example_DemoECommerceApp/blob/master/readme_assets/db.png
+- That way when you create a new controller, you can select in the dropdown box a model class and data context class, and it will build out the the REST controller for you and all using the FlixStore DB Context.
+- Made changes in Startup.cs to configure the app to work with my database connection.
+- Installed additional NuGets to get this to work.  IdentityServer4, IdentityServer4.AcessTokenValidation, IdentityServer4.AspNetIdentity
+- Still don't even know how Home.html should work without a route to the file.
+---
+
 
