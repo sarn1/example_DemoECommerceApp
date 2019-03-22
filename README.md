@@ -2,6 +2,7 @@
 - https://github.com/PacktPublishing/Building-RESTful-Web-Services-with-DOTNET-Core
 
 
+# Basic Rest
 - `<scheme name> : <hierarchical part> [? query] [# fragment]`
     - hierarchical part also contains the option query and fragment part
 - p.14 - caching can be set in the header
@@ -15,52 +16,23 @@
 - p31 - Create the `DemoECommerceApp` is `File > New > Project > ASP.NET Core Web Application > API`
 - p46 - Code for returning HTTP 500 error for faild `POST` is `return StatusCode(500);`
 
----
 
-## For eCommerce App (p.60)
-- Installed Microsoft.EntityFrameworkCore.SqlServer and Microsoft.EntityFrameworkCore.Tools
-- Created localdb using https://github.com/PacktPublishing/Building-RESTful-Web-Services-with-DOTNET-Core/blob/master/Chapter03/DB/FlixOneStore.sql
+# Ecommerce App
+- For eCommerce App (p.60)
+-installed Microsoft.EntityFrameworkCore.SqlServer and Microsoft.EntityFrameworkCore.Tools
+- created localdb using https://github.com/PacktPublishing/Building-RESTful-Web-Services-with-DOTNET-Core/blob/master/Chapter03/DB/FlixOneStore.sql
 - then ran `Scaffold-DbContext "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=FlixOneStore;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Tables Customers` in the package manager console.
-    - p.100 - For all database tables do `Scaffold-DbContext "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=FlixOneStore;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force`
 - https://github.com/sarn1/example_DemoECommerceApp/blob/master/readme_assets/db.png
 - That way when you create a new controller, you can select in the dropdown box a model class and data context class, and it will build out the the REST controller for you and all using the FlixStore DB Context.
-- Made changes in Startup.cs to configure the app to work with my database connection.
-- Installed additional NuGets to get this to work.  IdentityServer4, IdentityServer4.AcessTokenValidation, IdentityServer4.AspNetIdentity
-- https://localhost:44395/api/Customers/910d4c2f-b394-4578-8d9c-7ca3fd3266e2
-- Browse locally using the HTML file in the solution.
+- installed McApp.AppCore.IdentityServer4
+- (p.73) This is where I stopped following the book.  Code set incomplete.  
+---
 
+# Cors
+- To enable CORS for all origins, install Microsoft.AspNetCore.Cors
+- Then in startup.cs https://github.com/PacktPublishing/Building-RESTful-Web-Services-with-DOTNET-Core/blob/master/Chapter03/DemoECommerceApp/DemoECommerceApp/Startup.cs#L30-L40
 
-## Async & Await
-One thing that always helped see the difference when I first came to learn about was this scenario.
-```csharp
-
-
-Public async Task StartTaskAsync()
-{
-    Console.WriteLine("First Step");
-
-    Task awaitableTask = OtherMethodAsync();
-
-    Console.Writeline("Second step");
-    await awaitableTask;
-    Console.Writeline("4th Step");
-}
-
-Public async Task OtherMethodAsync()
-{
-    await Task.Delay(2000);
-    Console.WriteLine("Step 3");
-}
-```
-If you run this it will print out the steps in order. Because the await in the OtherMethodAsyncAsync passes control back to the calling method until whatever it is await has finished.
-
-In the calling method StartTaskAsync it doesn't await immediately so it can continue to run some code until it waits on the task returned by the OtherMethodAsyncAsync.
-
-If you were to make this synchronous. Ie remove all the asyncs and awaits and just return void rather than task. You would see that step 3 prints before Step 2
-
-## Middleware (Chapter 5)
-- p.132 - chart of what a middlware is
-- In `Startup.cs` the `.UseMVC` tells the system to add MVC to the piplines which is an extension of `Microsoft.AspNetCore.Builder.IApplicationBuilder` which has 4 important `IApplicationBuilder` methods.
-- These middleware method can be shortcircuited (a request that is nothing but ending a request) or pass the request to the next delegate.
-- Nuget: Microsoft.ApplicationInsights.AspNetCore and Swashbuckle.ASPNETCore for Swagger support.
-- p.147 - In Package Manager Console, navigate to the projects folder (`cd chapter5`) and then run `dotnet run`
+# Testing
+- FxCop is one fo the most popular tools used in security testing.  Built into VS.
+- Postman is one of the most popular tools when testing web service output.  It is a Google Chrome extension.  Another one is Advanced Rest Client.
+- RestSharp is a lightweight HTTP client library.
